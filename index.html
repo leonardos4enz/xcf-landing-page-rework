@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XCF - Transporte de Carga Consolidada</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- OpenLayers CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.2.2/ol.css">
+    <!-- OpenLayers CSS -->
+    <link rel="stylesheet" href="styles/map-styles.css">
+    <link rel="stylesheet" href="styles/downloads-styles.css">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Roboto - Minimalista) -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Custom Dropdown Styles -->
+    <link href="styles/custom-dropdown.css" rel="stylesheet">
+    <!-- Navbar Styles -->
+    <link href="styles/navbar-styles.css" rel="stylesheet">
+    <!-- Hero Styles -->
+    <link href="styles/hero-styles.css" rel="stylesheet">
+    <!-- Base Styles -->
+    <link href="styles/base-styles.css" rel="stylesheet">
+    <!-- Secciones Styles -->
+    <link href="styles/sections-styles.css" rel="stylesheet">
+    <!-- Footer Styles -->
+    <link href="styles/footer-styles.css" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- OpenLayers JS -->
+    <script src="https://cdn.jsdelivr.net/npm/ol@v7.2.2/dist/ol.js"></script>
+    <!-- Bootstrap Bundle JS with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <!-- Hero Slider JS -->
+    <script src="js/hero-slider.js"></script>
+    <!-- Map JS -->
+    <script src="js/map.js"></script>
+    <!-- Animaciones -->
+    <script src="js/animations.js"></script>
+    <!-- Script para animaciones al hacer scroll -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animación al hacer scroll
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const fadeInOnScroll = function() {
+                fadeElements.forEach(element => {
+                    const elementTop = element.getBoundingClientRect().top;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (elementTop < windowHeight - 100) {
+                        element.classList.add('visible');
+                    }
+                });
+            };
+            
+            // Ejecutar al cargar la página
+            fadeInOnScroll();
+            
+            // Ejecutar al hacer scroll
+            window.addEventListener('scroll', fadeInOnScroll);
+        });
+    </script>
+    
+    <!-- Funciones para manejar el scroll y el estado activo del navbar -->
+    <script>
+        function scrollToTop(event) {
+            event.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+            updateActiveLink('Inicio');
+        }
+
+        function scrollToMap(event) {
+            event.preventDefault();
+            const mapa = document.querySelector('#mapa');
+            if (mapa) {
+                mapa.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+            updateActiveLink('Sucursales');
+        }
+
+        function updateActiveLink(section) {
+            // Remover la clase active de todos los enlaces
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                link.setAttribute('aria-current', '');
+            });
+
+            // Agregar la clase active al enlace correspondiente
+            const activeLink = document.querySelector(`.nav-link:contains('${section}')`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+                activeLink.setAttribute('aria-current', 'page');
+            }
+        }
+
+        // Actualizar el enlace activo al hacer scroll
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section, .map-section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 100 && window.pageYOffset < sectionTop + sectionHeight - 100) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            // Actualizar el enlace activo
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                link.setAttribute('aria-current', '');
+            });
+
+            const activeLink = document.querySelector(`.nav-link[href*='#${current}']`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+                activeLink.setAttribute('aria-current', 'page');
+            }
+        });
+    </script>
+    
+
+</head>
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="assets/images/xcf-logo-mini-coloured.png" alt="XCF Logo">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#" onclick="scrollToTop(event)">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#mapa" onclick="scrollToMap(event)">Sucursales</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="servicesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Servicios
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-truck me-2"></i>Consolidado Regular</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-door-open me-2"></i>Puerta-Puerta</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-map-marked-alt me-2"></i>Cruce en Frontera (Transfer)</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-biohazard me-2"></i>Consolidado HAZ-MAT</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-hourglass-half me-2"></i>Prime Time</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-calendar-check me-2"></i>Entregas con cita</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-ship me-2"></i>Recolección y entrega portuaria</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-bolt me-2"></i>XPRESS 4U</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-box-open me-2"></i>Desconsolidación de contenedores</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-plane me-2"></i>Recolección y entrega en Aeropuerto</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-shield-alt me-2"></i>Seguridad</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-dolly me-2"></i>Maniobras</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-shield-alt me-2"></i>Seguro de Mercancías</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-store me-2"></i>Distribución Retail</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-headset me-2"></i>Atención personalizada</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Rastreo</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="supportDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Contacto
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="supportDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-comment-dots me-2"></i>Sugerencias</a></li>
+                            <li><a class="dropdown-item" href="#contacto"><i class="fas fa-envelope me-2"></i>Contacto directo</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-file-download me-2"></i>Descargas</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="portalDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Accesos
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="portalDropdown">
+                            <li><h6 class="dropdown-header">Portal Web</h6></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-users-cog me-2"></i>Interno</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-tie me-2"></i>Cliente</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-truck me-2"></i>Proveedor</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cogs me-2"></i>ERP</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><h6 class="dropdown-header">Registro</h6></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-plus me-2"></i>Nuevo Cliente</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-handshake me-2"></i>Nuevo Proveedor</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- End Navbar -->
+    <!-- Hero Video -->
+    <div class="video-hero position-relative" style="height: 100vh; overflow: hidden;">
+        <video autoplay muted loop playsinline style="position: absolute; width: 100%; height: 100%; object-fit: cover;">
+            <source src="assets/videos/video_01.mp4" type="video/mp4">
+            Tu navegador no soporta el elemento de video.
+        </video>
+        <div class="position-absolute w-100 h-100 d-flex align-items-center justify-content-center flex-column" style="background: rgba(0, 0, 0, 0.5);">
+            <div class="hero-content text-center mb-5">
+                <!-- Texto 1 (activo por defecto) -->
+                <div class="hero-text active">
+                    <h1>Transporte de Carga Seguro</h1>
+                    <p class="mb-5">Entregas puntuales en todo momento</p>
+                </div>
+                
+                <!-- Texto 2 -->
+                <div class="hero-text">
+                    <h1>Soluciones Logísticas Integrales</h1>
+                    <p class="mb-5">Conectamos tu negocio con el mundo</p>
+                </div>
+                
+                <!-- Texto 3 -->
+                <div class="hero-text">
+                    <h1>Logística Especializada</h1>
+                    <p class="mb-5">Soluciones a medida para tu negocio</p>
+                </div>
+            </div>
+            <!-- Botón fijo fuera de los textos que cambian -->
+            <div class="mt-4">
+                <a href="#contacto" class="btn-cta">Solicitar Cotización <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+    <!-- End Hero Video -->
+    
+    <div class="container mt-5">
+        <!-- Sección Nosotros -->
+        <section id="nosotros" class="bg-light">
+            <div class="container-fluid g-0">
+                <div class="row g-0">
+                    <!-- Columna de texto -->
+                    <div class="col-lg-6">
+                        <div class="section-content">
+                            <div class="container">
+                                <h2 class="fw-bold mb-3">Nosotros</h2>
+                                <p class="text-muted">Especialistas en transporte de carga consolidada con más de 20 años de experiencia. Ofrecemos soluciones logísticas integrales con presencia local, nacional e internacional, garantizando la seguridad de todos tus embarques.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Columna de imagen -->
+                    <div class="col-lg-6">
+                        <div class="image-container">
+                            <img src="/assets/images/nosotros_02.png" alt="Transporte de carga">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Visión -->
+        <section id="vision">
+            <div class="container-fluid g-0">
+                <div class="row g-0">
+                    <!-- Columna de imagen -->
+                    <div class="col-lg-6 order-lg-1">
+                        <div class="image-container">
+                            <img src="/assets/images/vision_02.png" alt="Visión">
+                        </div>
+                    </div>
+                    <!-- Columna de texto -->
+                    <div class="col-lg-6">
+                        <div class="section-content">
+                            <div class="container">
+                                <h2 class="fw-bold mb-3">Visión</h2>
+                                <p class="text-muted">Líderes en soluciones logísticas innovadoras y sostenibles. Nos comprometemos a ofrecer un servicio eficiente y confiable, promoviendo prácticas sostenibles y la mejora continua en todos nuestros procesos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Sección Valores -->
+    <div class="valores-bg">
+        <section id="valores">
+            <div class="container">
+                <div class="text-center mb-5">
+                    <h2 class="fw-bold">Nuestros Valores</h2>
+                    <p>Principios que guían nuestro compromiso con la excelencia</p>
+                </div>
+                <div class="valores-grid">
+                    <!-- Valor 1 -->
+                    <div class="valor-item">
+                        <div class="valor-icono">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2L3 12l3 9h12l3-9-9-10zm0 3.6l5.4 6-1.4 1.4L12 9.6 7.4 14 6 12.6l6-7z"/>
+                            </svg>
+                        </div>
+                        <h3 class="valor-titulo">Calidad</h3>
+                        <p class="valor-descripcion">Entregas en tiempo y forma</p>
+                    </div>
+                    
+                    <!-- Valor 2 -->
+                    <div class="valor-item">
+                        <div class="valor-icono">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z"/>
+                            </svg>
+                        </div>
+                        <h3 class="valor-titulo">Compromiso</h3>
+                        <p class="valor-descripcion">Con nuestros clientes</p>
+                    </div>
+                    
+                    <!-- Valor 3 -->
+                    <div class="valor-item">
+                        <div class="valor-icono">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                            </svg>
+                        </div>
+                        <h3 class="valor-titulo">Unidos</h3>
+                        <p class="valor-descripcion">Personal altamente capacitado</p>
+                    </div>
+                    
+                    <!-- Valor 4 -->
+                    <div class="valor-item">
+                        <div class="valor-icono">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4-5H8v-2h8v2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="valor-titulo">Flexibilidad</h3>
+                        <p class="valor-descripcion">Preparados para tus necesidades</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Sección de Mapa -->
+    <div class="map-section" id="mapa">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold">Nuestras Sucursales</h2>
+                <p>Encuentra la sucursal más cercana a tu ubicación</p>
+            </div>
+            <div class="map-container">
+                <div class="map-filters">
+                    <div class="map-search">
+                        <input type="text" id="searchInput" placeholder="Buscar sucursal..." class="form-control">
+                    </div>
+                    <div class="map-list">
+                        <div id="sucursalList"></div>
+                    </div>
+                </div>
+                <div id="map"></div>
+                <div id="popup" class="map-popup">
+                    <div class="popup-content">
+                        <h4 id="popup-title"></h4>
+                        <p id="popup-phone" class="popup-info"><i class="fas fa-phone"></i> <span id="popup-phone-value"></span></p>
+                        <p id="popup-email" class="popup-info"><i class="fas fa-envelope"></i> <span id="popup-email-value"></span></p>
+                        <div class="google-maps-btn">
+                            <a href="#" class="view-on-google" target="_blank">
+                                <i class="fab fa-google"></i> Ver en Google Maps
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Sección de Descargas -->
+    <section class="downloads-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold mb-3">Descargas</h2>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h4 class="mb-3">Formato de Remisión/BOL</h4>
+                    <div class="d-grid gap-2">
+                        <button class="download-btn d-flex align-items-center"><i class="fas fa-file-excel"></i> Descargar Excel</button>
+                        <button class="download-btn d-flex align-items-center"><i class="fas fa-file-pdf"></i> Descargar PDF</button>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h4 class="mb-3">Solicitud y Política de Crédito</h4>
+                    <div class="d-grid gap-2">
+                        <button class="download-btn d-flex align-items-center"><i class="fas fa-file-pdf"></i> Descargar PDF Solicitud de Crédito</button>
+                        <button class="download-btn d-flex align-items-center"><i class="fas fa-file-pdf"></i> Descargar PDF Política de Crédito</button>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <h4 class="mb-3">Aviso de Privacidad</h4>
+                    <div class="d-grid gap-2">
+                        <button class="download-btn d-flex align-items-center"><i class="fas fa-file-pdf"></i> Descargar PDF Clientes</button>
+                        <button class="download-btn d-flex align-items-center"><i class="fas fa-file-pdf"></i> Descargar PDF Empleados y Aspirantes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer-section bg-dark text-light">
+        <div class="container">
+            <div class="row">
+                <!-- Columna de Servicios -->
+                <div class="col-lg-3 mb-4">
+                    <h4 class="mb-4">Nuestros Servicios</h4>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-door-open me-2"></i>Puerta-Puerta</li>
+                        <li><i class="fas fa-bolt me-2"></i>Prime Time</li>
+                        <li><i class="fas fa-calendar-check me-2"></i>Entregas por cita</li>
+                        <li><i class="fas fa-truck me-2"></i>Consolidado Regular</li>
+                        <li><i class="fas fa-biohazard me-2"></i>Haz-Mat</li>
+                    </ul>
+                </div>
+
+                <!-- Columna de Contacto -->
+                <div class="col-lg-3 mb-4">
+                    <h4 class="mb-4">Información de Contacto</h4>
+                    <ul class="list-unstyled">
+                        <li><i class="fas fa-map-marker-alt me-2"></i>Carretera Monterrey - Nuevo Laredo, Km. 12.9 Nueva Castilla, 66050 Cd. Gral. Escobedo, N.L.</li>
+                        <li><i class="fas fa-phone me-2"></i>+52 81 82-25-84-02</li>
+                        <li><i class="fas fa-envelope me-2"></i>communitymanager@xcf.com.mx</li>
+                    </ul>
+                </div>
+
+                <!-- Columna de Redes Sociales -->
+                <div class="col-lg-3 mb-4">
+                    <h4 class="mb-4">Síguenos</h4>
+                    <div class="social-links">
+                        <a href="#" class="social-btn" target="_blank">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-btn" target="_blank">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-btn" target="_blank">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-btn" target="_blank">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-btn" target="_blank">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="footer-bottom text-center py-3">
+            <p class="mb-0">Todos los derechos reservados | XCF © 2025</p>
+        </div>
+    </footer>
+</body>
+</html>

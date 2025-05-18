@@ -1,0 +1,9 @@
+/* Estilos base para el sitio */
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Fondo de color para secciones alternadas */
+.bg-light {
+    background-color: #f8f9fa;
+}

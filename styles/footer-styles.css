@@ -1,0 +1,97 @@
+.footer-section {
+    padding: 60px 0 0 0;
+}
+
+.footer-section h4 {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    color: #fff;
+    font-weight: 600;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 0.8rem;
+    color: #fff;
+    opacity: 0.9;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.footer-section ul li:hover {
+    opacity: 1;
+    transform: translateX(5px);
+}
+
+.footer-section ul li i {
+    color: #fff;
+}
+
+.social-links {
+    display: flex;
+    gap: 1.2rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.social-btn {
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.social-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #3498db;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.social-btn:hover::before {
+    transform: scaleX(1);
+}
+
+.social-btn:hover {
+    color: #fff;
+}
+
+.social-btn i {
+    font-size: 1.3rem;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+.social-btn:hover i {
+    transform: scale(1.2);
+}
+
+.footer-bottom {
+    background: #2c3e50;
+    padding: 1.5rem 0;
+    margin-top: 3rem;
+}
+
+.footer-bottom p {
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    font-size: 0.9rem;
+}

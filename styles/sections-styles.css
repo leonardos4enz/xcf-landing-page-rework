@@ -1,0 +1,365 @@
+/* Estilos para las secciones de contenido */
+
+/* Contenedor de imágenes */
+.image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    overflow: hidden;
+}
+
+/* Para la sección de visión que tiene orden invertido */
+#vision .image-container {
+    left: 0;
+    right: auto;
+}
+
+/* Estilos para pantallas medianas y grandes */
+@media (min-width: 992px) {
+    .image-container {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100%;
+        min-height: auto;
+    }
+    
+    #vision .image-container {
+        left: 0;
+        right: auto;
+    }
+    
+    /* Asegurar que las columnas se muestren una al lado de la otra en desktop */
+    #nosotros .row > .col-lg-6:first-child,
+    #vision .row > .col-lg-6:last-child {
+        order: 0;
+    }
+}
+
+.image-container img {
+    width: 100%;
+    height: 80%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease;
+}
+
+.image-container:hover img {
+    transform: scale(1.02);
+}
+
+/* Estilos generales para secciones */
+section {
+    position: relative;
+    overflow: hidden;
+    min-height: auto;
+    padding: 4rem 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Ajustes para pantallas medianas y grandes */
+@media (min-width: 992px) {
+    section {
+        min-height: 500px;
+        padding: 0;
+    }
+}
+
+/* Estilos para la sección de valores */
+.valores-bg {
+    background-color: #2c3e50;
+}
+
+#valores {
+    color: white;
+}
+
+#valores .text-center {
+    margin-bottom: 3rem;
+}
+
+#valores h2 {
+    color: #ecf0f1;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+#valores .text-center p {
+    color: #bdc3c7;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.valores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.valor-item {
+    background: #34495e;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 3rem;
+}
+
+.valor-item:hover {
+    transform: translateY(-5px);
+}
+
+.valor-icono {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1.5rem;
+}
+
+.valor-icono svg {
+    fill: #3498db;
+    width: 100%;
+    height: 100%;
+}
+
+.valor-titulo {
+    color: #ecf0f1;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.valor-descripcion {
+    color: #bdc3c7;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+    text-align: center; 
+}
+
+/* Ajustes para móvil */
+@media (max-width: 991.98px) {
+    /* Hacer que la imagen esté debajo del texto en móvil */
+    #nosotros .row > .col-lg-6:last-child,
+    #vision .row > .col-lg-6:first-child {
+        order: 1; /* Mover la imagen después del texto */
+    }
+    
+    #nosotros .row > .col-lg-6:first-child,
+    #vision .row > .col-lg-6:last-child {
+        order: 0; /* Asegurar que el texto esté primero */
+    }
+    
+    .image-container {
+        margin-top: 2rem; /* Espacio entre texto e imagen en móvil */
+    }
+    
+    .image-container img {
+        height: 100%;
+        max-height: 300px; /* Altura máxima para imágenes en móvil */
+        width: 100%;
+        object-fit: cover;
+    }
+}
+
+
+
+/* Contenedor de la sección con padding */
+.section-content {
+    padding: 3rem 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+@media (min-width: 992px) {
+    .section-content {
+        padding: 6rem 0;
+    }
+}
+
+/* Asegurar que el contenido del contenedor tenga un ancho máximo */
+.section-content .container {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Estilos para títulos de sección */
+section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+section h2::after {
+    content: '';
+    position: absolute;
+    width: 50px;
+    height: 3px;
+    background: #ED1B26;
+    bottom: -8px;
+    left: 0;
+}
+
+/* Estilos para las tarjetas de servicios */
+.service-card {
+    transition: all 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+}
+
+.service-card .card-body {
+    padding: 2.5rem 1.5rem;
+}
+
+.service-card .icon-box {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(237, 27, 38, 0.1);
+    border-radius: 50%;
+    color: #ED1B26;
+    font-size: 2rem;
+    transition: all 0.3s ease;
+}
+
+.service-card:hover .icon-box {
+    background: #ED1B26;
+    color: #fff;
+    transform: scale(1.1);
+}
+
+/* Estilos para las imágenes */
+.img-feature {
+    border-radius: 10px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.img-feature:hover {
+    transform: scale(1.02);
+}
+
+/* Estilos para la sección de visión */
+#vision {
+    background: #f8f9fa;
+    position: relative;
+    overflow: hidden;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+}
+
+#vision .row {
+    min-height: 500px;
+}
+
+#vision .section-content {
+    padding: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#vision .section-content .container,
+#nosotros .section-content .container {
+    max-width: 540px;
+    margin: 0 auto;
+    padding: 2rem;
+    width: 100%;
+}
+
+#vision .image-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+}
+
+#vision .col-lg-6:last-child {
+    margin-left: 0;
+}
+
+@media (min-width: 992px) {
+    #vision .image-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50%;
+        height: 100%;
+        min-height: auto;
+    }
+    
+    #vision .col-lg-6:last-child {
+        margin-left: 50%;
+    }
+}
+
+/* Estilos para los párrafos principales */
+.lead {
+    color: #495057;
+    font-weight: 400;
+    line-height: 1.7;
+}
+
+/* Estilos responsivos */
+@media (max-width: 991.98px) {
+    section {
+        padding: 4rem 0;
+    }
+    
+    .section-title h2 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    section {
+        padding: 3rem 0;
+    }
+    
+    .service-card {
+        margin-bottom: 2rem;
+    }
+    
+    .section-title h2 {
+        font-size: 1.75rem;
+    }
+    
+    .lead {
+        font-size: 1.1rem;
+    }
+}
+
+/* Animación suave al hacer scroll */
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
